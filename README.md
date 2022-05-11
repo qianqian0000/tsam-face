@@ -1,4 +1,4 @@
-# facerecognition1
+# msl-acsp-front
 
 ## Project setup
 ```

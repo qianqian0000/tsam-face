@@ -1,17 +1,30 @@
+
 <!DOCTYPE html>
-<html lang="">
-  <head>
+
+<html>
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+    <!--强制让文档的宽度与设备的宽度保持1:1，并且文档最大的宽度比例是1.0，且不允许用户点击屏幕放大浏览-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <!--WebApp全屏模式，隐藏地址栏-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--禁止百度转码显示-->
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <!--制定iphone中safari顶端的状态条的样式（default:白色，black:黑色，black-translucent：半透明）-->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!--添加到IOS主屏后的标题-->
+    <meta name="apple-mobile-web-app-title" content="XX保险">
+    <meta name="author" content="TurboC">
+    <!--禁止浏览器从本地计算机的缓存中访问页面内容-->
+    <meta http-equiv=Pragma content=no-cache>
+    <meta http-equiv=Cache-Control content=no-cache>
+    <!--可以用于设定网页的到期时间。一旦网页过期，必须到服务器上重新传输-->
+    <meta http-equiv=Expires content=0>
+    <title>中宏保险</title>
+</head>
+<body>
+  <div id="app">
+  </div>
+</body>
+
 </html>
