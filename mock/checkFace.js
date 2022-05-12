@@ -15,7 +15,12 @@ module.exports = [
     type: "post",
     response: (config) => {
       console.log(config.query)
-
+      return {
+        "mslResultCode" :"0000",
+        "body": {
+          "configValue": "0.4"
+      }
+      }
 
     },
   },
@@ -24,6 +29,14 @@ module.exports = [
     type: "post",
     response: (config) => {
       const { linkUid } = config.query
+      console.log(linkUid)
+      return {
+        "mslResultCode" :"0000",
+        "body":{
+          "name": '*三三'
+        }
+      }
+      /*
       let userInfo = userlist.filter((item) => {
         if(item.uid === linkUid)return true;
       });
@@ -40,7 +53,7 @@ module.exports = [
           message: "",
         };
       }
-
+      */
     },
   },
 
@@ -50,6 +63,9 @@ module.exports = [
     type: "post",
     response: (config) => {
       const dataItem = config.query;
+      return {
+        "mslResultCode" :"0004",
+      }
       /*
       userlist = userlist.map((l) => {
         if(l.uid === dataItem.uid){

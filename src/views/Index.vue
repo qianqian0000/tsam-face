@@ -100,6 +100,7 @@ export default {
       tickStatus: "",
       // 链接uid
       linkUid: '',
+      mslResultCode: '',
       // 图片压缩比
       quality: "0.3",
       imgHeight: "",
@@ -126,38 +127,51 @@ export default {
       }).catch(() => {})
 
       this.linkUid = this.common.getParam('uid')// 获取地址中的uid
-      // 获取人脸识别次数
+      // 获取页面链接信息
       this.getLinkInfo(this.linkUid)
     }
   },
   methods: {
+    // 点击拍照
     h5ChooseImage() {
       if(this.agreementStatus === false) {
-        this.$toast.show('请勾选人脸识别授权协议书')
+        return this.$toast.show('请勾选人脸识别授权协议书')
+      }else if(this.mslResultCode === '0001') {
+        this.$confirm.warn({
+          type: 'success',
+          content: '您已完成人脸识别，谢谢！',
+        })
+      }else if(this.mslResultCode === '0002') {
+        this.$confirm.warn({
+          content: '人脸识别超限，您可以联系95383处理，谢谢！',
+        })
+      }else if(this.mslResultCode === '0003') {
+        this.$confirm.warn({
+          content: '人脸识别链接已失效，您可以联系95383处理，谢谢！',
+        })
       }else{
         this.$refs.h5input.dispatchEvent(new MouseEvent("click"))
       }
+      // this.getLinkInfo(this.linkUid, '2')
     },
     // 获取页面链接信息
     getLinkInfo(linkUid) {
       this.$loading.show()
-      api.linkInfo({'linkUid':linkUid}).then((res) => {
+      api.linkInfo({"linkUid":linkUid}).then((res) => {
         this.$loading.hide()
         this.clientName = res.body.name
+        this.mslResultCode = res.mslResultCode
         if(res.mslResultCode === '0001') {
           this.$confirm.warn({
             type: 'success',
-            btnshow: false,
             content: '您已完成人脸识别，谢谢！',
           })
         }else if(res.mslResultCode === '0002') {
           this.$confirm.warn({
-            btnshow: false,
             content: '人脸识别超限，您可以联系95383处理，谢谢！',
           })
         }else if(res.mslResultCode === '0003') {
           this.$confirm.warn({
-            btnshow: false,
             content: '人脸识别链接已失效，您可以联系95383处理，谢谢！',
           })
         }
@@ -176,38 +190,32 @@ export default {
         deviceOS = this.common.mobileInfo().deviceOS
       }
       let data = {
-        linkUid: this.linkUid,
-        imgStr: showImageStr,
-        deviceType: deviceType,
-        deviceOS: deviceOS,
-        picType: fileFormat,
-        PicWidth: imgWidth,
-        PicHeight: imgHeight
+        "linkUid": this.linkUid,
+        "imgStr": showImageStr,
+        "deviceType": deviceType,
+        "deviceOS": deviceOS,
+        "picType": fileFormat,
+        "picWidth": imgWidth,
+        "picHeight": imgHeight
       }
+      console.log(data)
       api.frontFaceRecog(data).then((res) => {
         this.$loading.hide()
-          if (res.mslResultCode === '0000') {
+        this.mslResultCode = res.mslResultCode
+          if (res.mslResultCode === '0000') { // 成功
             this.$confirm.warn({
               type: 'success',
               title:'提交成功',
-              btnshow: false,
               content: '人脸识别通过，谢谢！',
             })
-          }else if(res.mslResultCode === '0001') {
+          }else if(res.mslResultCode === '0004') { // 失败
             this.$confirm.warn({
-              type: 'success',
-              btnshow: false,
-              content: '您已完成人脸识别，谢谢！',
-            })
-          }else if(res.mslResultCode === '0002') {
-            this.$confirm.warn({
-              btnshow: false,
-              content: '人脸识别超限，您可以联系95383处理，谢谢！',
-            })
-          }else if(res.mslResultCode === '0003') {
-            this.$confirm.warn({
-              btnshow: false,
-              content: '人脸识别链接已失效，您可以联系95383处理，谢谢！',
+              content: '人脸识别失败，请您尝试重新拍照！',
+            }).then(res => {
+              // 点击确定res返回true
+              if (res) {
+                this.h5ChooseImage()
+              }
             })
           }
         }).catch(() => {
@@ -272,6 +280,7 @@ export default {
     },
     getBaseImg64(dataObj, isHeadRemoval) {
       var file = document.getElementById("bankCard_id-face").files[0];
+      if(this.common.isNull(file)) return
       var _this = this
       this.getFile(file, (imageStr, size, fileFormat) => {
         if (
