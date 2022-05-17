@@ -1,8 +1,8 @@
 // 本地环境配置
 module.exports = {
   title: '人脸识别',
-  baseUrl: 'https://tsam-sit.internal.manulife-sinochem.com/', // 项目地址
-  baseApi: '',
-  testApi: '/api',
+  baseUrl: '', // 项目地址
+  baseApi: 'http://localhost:8082/acsp/msl-acsp-dcenter/',
+  testApi: '/',
   envName: 'development',
 }

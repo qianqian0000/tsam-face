@@ -100,15 +100,15 @@ export default {
       tickStatus: "",
       // 链接uid
       linkUid: '',
-      mslResultCode: '',
-      // 图片压缩比
+      mslResultCode: '0000',
+      // 图片压缩比，默认0.3，从后台获取
       quality: "0.3",
       imgHeight: "",
       imgWidth: "",
       base64: "",
 
       // 协议内容
-      agreementContent:'1、本人明确知晓并同意授权中宏人寿保险有限公司（中宏人寿）获取包括本人头像照在内本人个人信息运用于为本人提供的保单业务；2、本人同时授权为保单业务提供技术服务的第三方合法征信机构有权获取本人的个人信息，中宏人寿将要求第三方合法征信机构对本人的个人信息提供符合中国法律法规规定的保护；3、本人明确知晓并同意，通过微信提交的所有资料都会经过微信运营商的存储服务器，处于微信运营商控制下的客户资料的信息安全及隐私保护责任由微信运营商负责，适用微信运营商的信息安全及隐私保护政策。'
+      agreementContent:''
     };
   },
   computed: {
@@ -120,23 +120,26 @@ export default {
     if(this.common.isMobilePhone()) {
       this.modifyShow = true
       // 获取配置表指定key内容
+      
       api.findConfig({"configKey":"Facefront:picChange"}).then((res) => {
         if(res.mslResultCode === '0000' && this.common.isNotNull(res.body)) {
           this.quality = res.body.configValue
         }
       }).catch(() => {})
-
+      
       this.linkUid = this.common.getParam('uid')// 获取地址中的uid
       // 获取页面链接信息
       this.getLinkInfo(this.linkUid)
+      
     }
   },
   methods: {
     // 点击拍照
     h5ChooseImage() {
-      if(this.agreementStatus === false) {
+      if(this.agreementStatus === false)
         return this.$toast.show('请勾选人脸识别授权协议书')
-      }else if(this.mslResultCode === '0001') {
+
+     if(this.mslResultCode === '0001') {
         this.$confirm.warn({
           type: 'success',
           content: '您已完成人脸识别，谢谢！',
@@ -149,17 +152,16 @@ export default {
         this.$confirm.warn({
           content: '人脸识别链接已失效，您可以联系95383处理，谢谢！',
         })
-      }else{
+      }else if(this.mslResultCode === '0000' || this.mslResultCode === '0004'){
         this.$refs.h5input.dispatchEvent(new MouseEvent("click"))
       }
-      // this.getLinkInfo(this.linkUid, '2')
     },
     // 获取页面链接信息
     getLinkInfo(linkUid) {
       this.$loading.show()
       api.linkInfo({"linkUid":linkUid}).then((res) => {
         this.$loading.hide()
-        this.clientName = res.body.name
+        if(res.mslResultCode === '0009') this.$router.push('/error')
         this.mslResultCode = res.mslResultCode
         if(res.mslResultCode === '0001') {
           this.$confirm.warn({
@@ -174,10 +176,10 @@ export default {
           this.$confirm.warn({
             content: '人脸识别链接已失效，您可以联系95383处理，谢谢！',
           })
+        }else if(res.mslResultCode === '0000') {
+          this.clientName = res.body.name
         }
-      }).catch(() => {
-
-      });
+      }).catch(() => {});
     },
     
     // 人脸识别
@@ -198,7 +200,6 @@ export default {
         "picWidth": imgWidth,
         "picHeight": imgHeight
       }
-      console.log(data)
       api.frontFaceRecog(data).then((res) => {
         this.$loading.hide()
         this.mslResultCode = res.mslResultCode
@@ -238,8 +239,8 @@ export default {
       let img = new Image();
       img.onload = function () {
         // // 最大尺寸限制
-        let maxWidth = 2500;
-        let maxHeight = 2500;
+        let maxWidth = 300;
+        let maxHeight = 300;
         // // 图片原始尺寸
         let originWidth = img.width;
         let originHeight = img.height;

@@ -41,14 +41,6 @@ module.exports = {
             '^/api':'/api'
           }
       },
-      '/api-pro': {
-        target: 'http://127.0.0.1:8888/',
-        // ws:true,
-        changOrigin:true,
-        pathRewrite:{
-          '^/api-pro':''
-        }
-      }
     },
     */
     before: require('./mock/mock-server.js')

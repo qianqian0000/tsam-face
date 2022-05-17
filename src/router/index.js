@@ -8,7 +8,12 @@ const routes = [
     path: '/',
     name: '',
     component: () => import('@/views/Index.vue')
-  }
+  },
+  {
+    path: '/error',
+    name: 'error',
+    component: () => import('@/views/Error.vue')
+  },
 ]
 
 const router = new VueRouter({

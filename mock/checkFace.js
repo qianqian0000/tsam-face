@@ -11,30 +11,30 @@ var userlist = [
 
 module.exports = [
   {
-    url: "/dcenter/facerecog/findConfig",
+    url: "/acsp/msl-acsp-dcenter/dcenter/facerecog/findConfig",
     type: "post",
     response: (config) => {
       console.log(config.query)
       return {
         "mslResultCode" :"0000",
-        "body": {
-          "configValue": "0.4"
-      }
+        // "body": {
+        //   "configValue": "0.4"
+        // }
       }
 
     },
   },
   {
-    url: "/dcenter/facerecog/linkInfo",
+    url: "/acsp/msl-acsp-dcenter/dcenter/facerecog/linkInfo",
     type: "post",
     response: (config) => {
       const { linkUid } = config.query
       console.log(linkUid)
       return {
-        "mslResultCode" :"0000",
-        "body":{
-          "name": '*三三'
-        }
+        "mslResultCode" :"0003",
+        // "body":{
+        //   "name": '*三三'
+        // }
       }
       /*
       let userInfo = userlist.filter((item) => {
@@ -59,7 +59,7 @@ module.exports = [
 
   // 人脸识别验证
   {
-    url: "/dcenter/facerecog/frontFaceRecog",
+    url: "/acsp/msl-acsp-dcenter/dcenter/facerecog/frontFaceRecog",
     type: "post",
     response: (config) => {
       const dataItem = config.query;

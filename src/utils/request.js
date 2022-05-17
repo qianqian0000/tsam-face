@@ -8,7 +8,7 @@ const service = axios.create({
     'Content-Type': 'application/json;charset=UTF-8',
     'Accept': '*/*'
   },
-  baseURL: process.env.VUE_APP_BASE_API, // baseApi, // url = base url + request url
+  baseURL: baseApi, // url = base url + request url
   timeout: 5000, // request timeout
 })
 
