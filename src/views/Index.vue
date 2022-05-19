@@ -24,7 +24,7 @@
             accept="image/*"
             capture="user"
             class="choosefile"
-            @change="getBaseImg64($event)"
+            @change="getBaseImg64()"
           />
           <img src="~@/assets/images/authentication/sxt_03.png" />
         </div>
@@ -129,7 +129,7 @@ export default {
       
       this.linkUid = this.common.getParam('uid')// 获取地址中的uid
       // 获取页面链接信息
-      this.getLinkInfo(this.linkUid)
+      // this.getLinkInfo(this.linkUid)
       
     }
   },
@@ -200,6 +200,8 @@ export default {
         "picWidth": imgWidth,
         "picHeight": imgHeight
       }
+      console.log(data)
+
       api.frontFaceRecog(data).then((res) => {
         this.$loading.hide()
         this.mslResultCode = res.mslResultCode
@@ -279,7 +281,7 @@ export default {
       };
       img.src = result;
     },
-    getBaseImg64(dataObj, isHeadRemoval) {
+    getBaseImg64() {
       var file = document.getElementById("bankCard_id-face").files[0];
       if(this.common.isNull(file)) return
       var _this = this
@@ -300,7 +302,7 @@ export default {
           return;
         }
         this.processImages(
-          "",
+          fileFormat,
           imageStr,
           size,
           this.quality,
@@ -312,16 +314,15 @@ export default {
             let map = {};
             map.showImageStr = image; // 压缩后直接可显示的图片数据
             _this.previewImg = image
-            if (isHeadRemoval) {
-              // 去除头部
-              imageStr = image.replace(/^data:image\/\w+;base64,/, "");
-            }
+            // 去除头部
+            imageStr = image.replace(/^data:image\/\w+;base64,/, "");
             map.imageStr = imageStr; // 解析后的图片
             map.fileFormat = fileFormat; // 文件后缀
             map.imageWidth = imageWidth; // 图片宽度
             map.imageHeight = imageHeight; // 图片高度
+
             // 人脸验证
-            _this.h5checkFace(map.showImageStr,map.imageWidth,map.imageHeight,map.fileFormat)
+            _this.h5checkFace(map.imageStr,map.imageWidth,map.imageHeight,map.fileFormat)
           }
         );
       });

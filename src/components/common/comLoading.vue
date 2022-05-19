@@ -84,9 +84,6 @@ export default {
   right: 0;
   z-index: 10001;
   .loading-cont {
-    width: 210 / 7.5vw;
-    height: 210 / 7.5vw;
-    border-radius: 20 / 7.5vw;
     overflow: hidden;
     position: absolute;
     top: 50%;
@@ -95,24 +92,20 @@ export default {
     background-color: rgba(0, 0, 0, 0.5);
     img {
       display: block;
-      width: 82 / 7.5vw;
-      margin: 38 / 7.5vw auto 24 / 7.5vw;
       opacity: 0.8;
       padding: 1px;
+      margin: 0 auto;
     }
     div {
       text-align: center;
-      color: #fff;
-      font-size: 26 / 7.5vw;
+      font-size: 18px;
+      margin-top: 20px;
     }
   }
   &.new {
     background: rgba(224, 224, 224, 0.5);
     .loading-cont {
       background: transparent;
-      img {
-        width: 50 / 7.5vw;
-      }
       div {
         display: none;
       }
